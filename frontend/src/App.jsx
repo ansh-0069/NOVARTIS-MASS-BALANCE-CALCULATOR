@@ -16,20 +16,20 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 relative overflow-hidden">
-      {/* Animated Background */}
+
       <div className="fixed inset-0 bg-gradient-to-br from-slate-950 via-blue-950/20 to-slate-950" />
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(56,189,248,0.05),transparent_50%)]" />
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(139,92,246,0.03),transparent_50%)]" />
-      
-      {/* Floating Particles */}
+
+
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute w-1 h-1 bg-blue-400/20 rounded-full"
-            initial={{ 
-              x: Math.random() * window.innerWidth, 
-              y: Math.random() * window.innerHeight 
+            initial={{
+              x: Math.random() * window.innerWidth,
+              y: Math.random() * window.innerHeight
             }}
             animate={{
               y: [null, Math.random() * window.innerHeight],
@@ -45,14 +45,14 @@ function App() {
         ))}
       </div>
 
-      {/* Main Content */}
+
       <div className="relative z-10">
-        {/* Header */}
+
         <nav className="border-b border-slate-800/50 backdrop-blur-xl bg-slate-900/40">
           <div className="max-w-7xl mx-auto px-6 py-6">
             <div className="flex items-center justify-between">
-              {/* Logo */}
-              <motion.div 
+
+              <motion.div
                 className="flex items-center gap-4"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -74,7 +74,7 @@ function App() {
                 </div>
               </motion.div>
 
-              {/* Navigation Tabs */}
+
               <div className="flex gap-2 bg-slate-900/60 backdrop-blur-xl p-1.5 rounded-xl border border-slate-800/50">
                 {tabs.map((tab, index) => {
                   const Icon = tab.icon;
@@ -82,11 +82,10 @@ function App() {
                     <motion.button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`relative px-6 py-2.5 rounded-lg font-medium transition-all flex items-center gap-2 ${
-                        activeTab === tab.id
-                          ? 'text-white'
-                          : 'text-slate-400 hover:text-slate-300'
-                      }`}
+                      className={`relative px-6 py-2.5 rounded-lg font-medium transition-all flex items-center gap-2 ${activeTab === tab.id
+                        ? 'text-white'
+                        : 'text-slate-400 hover:text-slate-300'
+                        }`}
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
@@ -108,15 +107,15 @@ function App() {
           </div>
         </nav>
 
-        {/* Main Content Area */}
+
         <main className="max-w-7xl mx-auto px-6 py-8">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
             >
               {activeTab === 'calculator' && <Calculator />}
               {activeTab === 'analytics' && <Analytics />}
@@ -125,12 +124,12 @@ function App() {
           </AnimatePresence>
         </main>
 
-        {/* Footer */}
+
         <footer className="border-t border-slate-800/50 backdrop-blur-xl bg-slate-900/40 mt-12">
           <div className="max-w-7xl mx-auto px-6 py-6">
             <div className="flex items-center justify-between text-sm">
               <div className="text-slate-400">
-                <span className="text-white font-semibold">Mass Balance AI</span> v2.0 
+                <span className="text-white font-semibold">Mass Balance AI</span> v2.0
                 <span className="mx-2">•</span>
                 <span className="text-blue-400">ICH Q1A(R2)</span> Compliant
                 <span className="mx-2">•</span>
