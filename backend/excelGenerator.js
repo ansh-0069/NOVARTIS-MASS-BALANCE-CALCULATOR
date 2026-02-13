@@ -23,7 +23,7 @@ function generateExcelReport(options = {}) {
 
     console.log('📊 Generating Excel...');
 
-    const python = spawn('python3', args);
+    const python = spawn('python', args);
     let stdout = '';
     let stderr = '';
 

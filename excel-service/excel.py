@@ -12,12 +12,13 @@ def ensure_directories():
     if not os.path.exists(REPORTS_DIR):
         os.makedirs(REPORTS_DIR)
 
-def fetch_latest_data():
-    if not os.path.exists(DB_PATH):
-        print(json.dumps({'status': 'error', 'message': f'Database not found at {DB_PATH}'}))
+def fetch_latest_data(db_path=None):
+    target_db = db_path if db_path else DB_PATH
+    if not os.path.exists(target_db):
+        print(json.dumps({'status': 'error', 'message': f'Database not found at {target_db}'}))
         sys.exit(1)
 
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(target_db)
     cursor = conn.cursor()
     
     # Fetch latest calculation
@@ -31,10 +32,10 @@ def fetch_latest_data():
     conn.close()
     return row, history
 
-def generate_excel():
+def generate_excel(db_path=None, output_file=None):
     ensure_directories()
     
-    data, history = fetch_latest_data()
+    data, history = fetch_latest_data(db_path)
     if not data:
         print(json.dumps({'status': 'error', 'message': 'No data found in database'}))
         sys.exit(1)
@@ -47,8 +48,15 @@ def generate_excel():
     omega_val = deg_mw / parent_mw if parent_mw and parent_mw != 0 else 0
     s_val = lambda_val * omega_val
 
-    filename = f"Mass Balance Report {datetime.now().strftime('%Y%m%d_%H%M')}.xlsx"
-    output_path = os.path.join(REPORTS_DIR, filename)
+    if output_file:
+        output_path = output_file
+        # Ensure dir exists
+        out_dir = os.path.dirname(output_path)
+        if out_dir and not os.path.exists(out_dir):
+            os.makedirs(out_dir)
+    else:
+        filename = f"Mass Balance Report {datetime.now().strftime('%Y%m%d_%H%M')}.xlsx"
+        output_path = os.path.join(REPORTS_DIR, filename)
     
     workbook = xlsxwriter.Workbook(output_path)
     
@@ -500,7 +508,10 @@ def generate_history_only():
     print(json.dumps({'status': 'success', 'file': output_path}))
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1 and sys.argv[1] == '--history-only':
+    if len(sys.argv) > 2:
+        # Expected args: script.py [db_path] [output_path]
+        generate_excel(sys.argv[1], sys.argv[2])
+    elif len(sys.argv) > 1 and sys.argv[1] == '--history-only':
         generate_history_only()
     else:
         generate_excel()
