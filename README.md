@@ -55,23 +55,22 @@ Watch the complete demonstration of Mass Balance Calculator in action:
 
 ### 📈 Smart Report Generation
 
-* **PDF Reports** with:
+* **Professional 4-Page PDF Reports** (jsPDF) with:
+  - **Page 1**: Professional cover page with status badge and branding
+  - **Page 2**: Executive summary with key findings, LK-IMB statistical analysis with visual confidence interval scale, and risk assessment
+  - **Page 3**: CIMB statistical analysis with visual confidence interval representation and detailed risk assessment
+  - **Page 4**: Complete method comparison table, correction factors display, diagnostic assessment, and ICH Q1A(R2) compliance statement
+  - Color-coded risk levels with visual indicators
+  - Timestamp-based file naming: `Mass_Balance_Report_YYYYMMDD_Method.pdf`
 
-  - Executive summary
-  - LK-IMB statistical analysis with confidence intervals
-  - CIMB statistical analysis with confidence intervals
-  - Method comparison charts
-  - Risk assessment visualization
-  - ICH Q1A(R2) compliance indicators
-* **Excel Workbooks** with:
-
-  - Interactive data entry sheet
-  - Automated calculations engine
-  - LK-IMB confidence intervals & risk levels
-  - CIMB confidence intervals & risk levels
-  - Diagnostic report with conditional formatting
-  - Trend tracking charts
-  - Method comparison matrix
+* **Comprehensive Excel Workbooks** (XlsxWriter) with:
+  - **6-Sheet Full Report**: Calculation Input, Mass Balance Results, Detailed Analysis, Calculation History, Analytics Dashboard, Reference Guide
+  - **History-Only Export**: Single-sheet calculation history table for quick data review
+  - Modern blue header styling (#3b82f6)
+  - Timestamp-based file naming: `Mass Balance Report YYYYMMDD_HHMM.xlsx`
+  - LK-IMB & CIMB confidence intervals with color-coded risk levels
+  - Automated calculations with correction factors (Lambda, Omega, S)
+  - Conditional formatting for instant visual feedback
 
 ### 🌐 Full Stack Architecture
 
@@ -132,24 +131,31 @@ Watch the complete demonstration of Mass Balance Calculator in action:
 mass-balance/
 │
 ├── backend/
-│   ├── server.js                    # Express API server
-│   ├── mass_balance.db              # SQLite database
+│   ├── server.js                    # Express API server with RESTful endpoints
+│   ├── excelGenerator.js            # Excel report generation orchestrator
+│   ├── mass_balance.db              # SQLite database for calculation history
+│   ├── reports/                     # Generated Excel reports directory
 │   ├── package.json                 # Backend dependencies
 │   └── node_modules/
 │
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── InputForm.jsx        # Data entry form
-│   │   │   └── Results.jsx          # Results display with charts
-│   │   ├── App.jsx                  # Main application
+│   │   │   ├── Calculator.jsx       # Main calculator with input form
+│   │   │   ├── Results.jsx          # Results with charts & 4-page PDF export
+│   │   │   └── History.jsx          # Calculation history with Excel export
+│   │   ├── App.jsx                  # Main application router
 │   │   └── main.jsx                 # Entry point
 │   ├── package.json                 # Frontend dependencies
 │   ├── vite.config.js               # Vite configuration
 │   └── node_modules/
 │
-├── app.py                           # Excel report generator
-├── Mass_Balance_Calculator.xlsx     # Generated Excel workbook
+├── excel-service/
+│   ├── excel.py                     # Python Excel generation service
+│   ├── reports/                     # Generated Excel files
+│   ├── requirements.txt             # Python dependencies
+│   └── README.md                    # Excel service documentation
+│
 └── README.md                        # This file
 ```
 
@@ -208,9 +214,13 @@ Required packages:
 #### 4. Install Python Dependencies
 
 ```bash
-cd ..
-pip install xlsxwriter
+cd excel-service
+pip install -r requirements.txt
 ```
+
+Required Python packages:
+- xlsxwriter
+- sqlite3 (built-in)
 
 ### Running the Application
 
@@ -319,7 +329,7 @@ Statistical Analysis:
 | **RRF**                     | Relative Response Factor      | 0.80                                       |
 | **Stress Condition**        | Type of stress applied        | Base, Acid, Oxidative, Thermal, Photolytic |
 | **Sample ID**               | Unique sample identifier      | VAL-2026-001                               |
-| **Analyst Name**            | Person performing analysis    | A. Singla                                  |
+| **Analyst Name**            | Person performing analysis    | Anshuman                                   |
 
 ---
 
@@ -341,26 +351,91 @@ Statistical Analysis:
 - **Recommended Method**: Based on degradation level
 - **Diagnostic Messages**: ICH Q1A(R2) compliance indicators
 
-### PDF Report Contents
+### PDF Report Contents (4-Page Professional Format)
 
-1. **Cover Page**: Title, status badge, metadata
-2. **Executive Summary**: Key findings, risk levels, anomaly detection
-3. **LK-IMB Statistical Analysis**: CI visualization, risk assessment
-4. **CIMB Statistical Analysis**: CI visualization, risk assessment
-5. **Method Comparison**: All results with correction factors
-6. **Diagnostic Assessment**: Recommendations and compliance notes
+1. **Page 1 - Cover Page**:
+   - Professional pharmaceutical report design
+   - MB badge with blue circular branding
+   - Report title and ICH Q1A(R2) compliance label
+   - Color-coded status badge (PASS/ALERT/FAIL)
+   - Report generation date and time
+   - Version: Dual-Method Mass Balance Calculator v2.0
 
-### Excel Workbook Sheets
+2. **Page 2 - Executive Summary & LK-IMB Analysis**:
+   - Analysis overview with conclusion
+   - Key findings (degradation level, correction factors, CIMB results, risk level)
+   - Volatile loss and UV-silent degradant detection
+   - LK-IMB statistical analysis with visual confidence interval scale (85-115%)
+   - Acceptable range visualization (95-105% highlighted in green)
+   - Point estimate with error bars
+   - 3-tier risk assessment (LOW/MODERATE/HIGH) with color coding
+   - Current LK-IMB risk level banner
 
-1. **Data Entry**: Input form with instructions
-2. **Calculations**: Hidden engine with all formulas
-3. **Diagnostic Report**:
-   - All method results
-   - LK-IMB 95% CI with risk level
-   - CIMB 95% CI with risk level
-   - Final status with conditional formatting
-4. **Trend Tracking**: Stability trend charts
-5. **Method Comparison**: LK-IMB vs CIMB feature matrix
+3. **Page 3 - CIMB Statistical Analysis**:
+   - CIMB confidence interval visualization with scale (85-115%)
+   - Point estimate (blue) with 95% CI error bars
+   - Acceptable range overlay (95-105%)
+   - Detailed risk assessment matrix
+   - Current CIMB risk level status banner
+
+4. **Page 4 - Method Comparison & Results**:
+   - Complete results table for all 5 methods (SMB, AMB, RMB, LK-IMB, CIMB)
+   - Formula display for each method
+   - Status indicators (PASS/ALERT/FAIL)
+   - Recommended method highlighted in green
+   - Correction factors display (Lambda, Omega, S)
+   - Diagnostic assessment in formatted text box
+   - Scientific rationale explanation
+   - ICH Q1A(R2) compliance statement
+   - Footer with timestamp and version info
+
+### Excel Workbook Sheets (6-Sheet Full Report)
+
+1. **Calculation Input**:
+   - User-friendly input form with labeled fields
+   - Sample metadata (Sample ID, Analyst, Date, Stress Type)
+   - API and degradant measurements (initial & stressed)
+   - Correction factor inputs (Parent MW, Degradant MW, RRF)
+   - Modern blue headers (#3b82f6)
+
+2. **Mass Balance Results**:
+   - All 5 method results (SMB, AMB, RMB, LK-IMB, CIMB)
+   - LK-IMB with 95% confidence interval (Lower CI, Point Estimate, Upper CI)
+   - CIMB with 95% confidence interval (Lower CI, Point Estimate, Upper CI)
+   - Risk levels for both LK-IMB and CIMB (LOW/MODERATE/HIGH)
+   - Color-coded risk assessment (green/yellow/red)
+   - Calculated correction factors (Lambda, Omega, Stoichiometric)
+
+3. **Detailed Analysis**:
+   - Method-by-method breakdown
+   - Formula explanations
+   - Statistical significance indicators
+   - Recommended method with justification
+
+4. **Calculation History**:
+   - Timestamped calculation log
+   - Sample ID tracking
+   - Method results comparison over time
+   - Risk level trends
+
+5. **Analytics Dashboard**:
+   - Key performance indicators (KPIs)
+   - Method usage statistics
+   - Risk distribution summary
+
+6. **Reference Guide**:
+   - Method descriptions and formulas
+   - Correction factor definitions (Lambda, Omega, S)
+   - Risk level criteria and acceptance ranges
+   - ICH Q1A(R2) compliance notes
+
+### History-Only Excel Export
+
+- **Single-sheet format** for quick data review
+- Contains only the Calculation History Log table
+- Includes: Calc ID, Date, Sample ID, Analyst, Stress Type, API/Degradant values, Method, Result, Risk Level, Status
+- Filename: `Calculation History YYYYMMDD_HHMM.xlsx`
+- Accessible from History page via "Export History" button
 
 ---
 
@@ -406,7 +481,7 @@ Use this data to test the application:
 | RRF                 | 0.80         |
 | Stress Condition    | Base         |
 | Sample ID           | VAL-2026-001 |
-| Analyst Name        | A. Singla    |
+| Analyst Name        | Anshuman     |
 
 **Expected Results:**
 
@@ -623,5 +698,15 @@ For questions, issues, or feature requests, please open an issue on the reposito
 
 ---
 
-**Last Updated:** February 2026
-**Version:** 2.0 (LK-IMB & CIMB Statistical Analysis)
+**Last Updated:** February 14, 2026
+**Version:** 2.1 (Enhanced PDF & Excel Reporting)
+
+### Recent Updates (v2.1)
+
+- ✅ **Professional 4-Page PDF Reports** with visual confidence interval scales for both LK-IMB and CIMB
+- ✅ **History-Only Excel Export** for quick calculation history downloads
+- ✅ **Timestamp-Based File Naming** for better organization (YYYYMMDD_HHMM format)
+- ✅ **Modern Excel Styling** with blue headers (#3b82f6) and improved formatting
+- ✅ **Enhanced Excel Service** with Python backend and 6-sheet comprehensive reports
+- ✅ **Improved Risk Visualization** with color-coded assessment matrices in PDF
+- ✅ **Code Optimization** for cleaner, production-ready codebase
