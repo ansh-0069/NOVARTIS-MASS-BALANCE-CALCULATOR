@@ -275,9 +275,9 @@ function History() {
                     return (
                       <motion.tr
                         key={calc.id}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 20 }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
                         transition={{ delay: index * 0.05 }}
                         className="border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors"
                       >

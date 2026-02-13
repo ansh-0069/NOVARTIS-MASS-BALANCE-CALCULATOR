@@ -54,9 +54,9 @@ function App() {
 
               <motion.div
                 className="flex items-center gap-4"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.2 }}
               >
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-violet-500 blur-xl opacity-50" />
@@ -86,9 +86,9 @@ function App() {
                         ? 'text-white'
                         : 'text-slate-400 hover:text-slate-300'
                         }`}
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.2 }}
                     >
                       {activeTab === tab.id && (
                         <motion.div

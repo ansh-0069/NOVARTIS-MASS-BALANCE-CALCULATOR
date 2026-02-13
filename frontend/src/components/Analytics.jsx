@@ -224,7 +224,7 @@ function Analytics() {
               key={metric.label}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: index * 0.1 }}
+              transition={{ duration: 0.2 }}
               className="relative overflow-hidden rounded-xl border border-slate-800/50 bg-gradient-to-br from-slate-900/90 to-slate-900/50 backdrop-blur-xl p-6"
             >
               <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-${metric.color}-500/10 to-transparent blur-2xl`} />
@@ -303,7 +303,7 @@ function Analytics() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.1 }}
+          transition={{ duration: 0.2 }}
           className="relative overflow-hidden rounded-2xl border border-slate-800/50 bg-gradient-to-br from-slate-900/90 to-slate-900/50 backdrop-blur-xl p-6"
         >
           <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
@@ -336,7 +336,7 @@ function Analytics() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
+          transition={{ duration: 0.2 }}
           className="relative overflow-hidden rounded-2xl border border-slate-800/50 bg-gradient-to-br from-slate-900/90 to-slate-900/50 backdrop-blur-xl p-6"
         >
           <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
@@ -366,7 +366,7 @@ function Analytics() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
+          transition={{ duration: 0.2 }}
           className="relative overflow-hidden rounded-2xl border border-slate-800/50 bg-gradient-to-br from-slate-900/90 to-slate-900/50 backdrop-blur-xl p-6"
         >
           <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
@@ -385,9 +385,9 @@ function Analytics() {
               return (
                 <motion.div
                   key={risk.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 + index * 0.1 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2 }}
                   className={`p-4 ${colors[risk.name].bg} rounded-xl border border-slate-700/50`}
                 >
                   <div className="flex items-center justify-between mb-2">

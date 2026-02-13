@@ -25,7 +25,7 @@ const Tooltip = ({ children, content }) => {
       {show && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1 }}
           className="absolute z-50 bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl border border-slate-700 whitespace-nowrap"
         >
           {content}
@@ -197,8 +197,8 @@ function Calculator() {
     <div className="space-y-6">
       {/* Header Card */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         className="relative overflow-hidden rounded-2xl border border-slate-800/50 bg-gradient-to-br from-slate-900/90 to-slate-900/50 backdrop-blur-xl p-6"
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-500/10 to-violet-500/10 blur-3xl" />
@@ -267,8 +267,8 @@ function Calculator() {
 
       {/* Input Form */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{ delay: 0.1 }}
         className="relative overflow-hidden rounded-2xl border border-slate-800/50 bg-gradient-to-br from-slate-900/90 to-slate-900/50 backdrop-blur-xl p-8"
       >
@@ -284,7 +284,7 @@ function Calculator() {
             <motion.div
               key={field.name}
               initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ delay: index * 0.05 }}
               className="group"
             >
@@ -319,7 +319,7 @@ function Calculator() {
           {/* Stress Type Dropdown */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: 0.35 }}
             className="group"
           >
@@ -350,7 +350,7 @@ function Calculator() {
           {/* Sample ID */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
             <label className="block mb-2">
@@ -371,7 +371,7 @@ function Calculator() {
           {/* Analyst Name */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: 0.45 }}
           >
             <label className="block mb-2">
@@ -466,7 +466,7 @@ function Calculator() {
         {!autoCalculate && !results && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
             className="mt-6 flex items-start gap-3 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl"
           >
