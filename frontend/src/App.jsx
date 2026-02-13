@@ -1,0 +1,151 @@
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Calculator from './components/Calculator';
+import History from './components/History';
+import Analytics from './components/Analytics';
+import { Activity, History as HistoryIcon, BarChart3, Sparkles } from 'lucide-react';
+
+function App() {
+  const [activeTab, setActiveTab] = useState('calculator');
+
+  const tabs = [
+    { id: 'calculator', label: 'Analysis Lab', icon: Activity },
+    { id: 'analytics', label: 'Intelligence', icon: BarChart3 },
+    { id: 'history', label: 'Archive', icon: HistoryIcon },
+  ];
+
+  return (
+    <div className="min-h-screen bg-slate-950 relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-slate-950 via-blue-950/20 to-slate-950" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(56,189,248,0.05),transparent_50%)]" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(139,92,246,0.03),transparent_50%)]" />
+      
+      {/* Floating Particles */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-blue-400/20 rounded-full"
+            initial={{ 
+              x: Math.random() * window.innerWidth, 
+              y: Math.random() * window.innerHeight 
+            }}
+            animate={{
+              y: [null, Math.random() * window.innerHeight],
+              x: [null, Math.random() * window.innerWidth],
+              opacity: [0.2, 0.5, 0.2],
+            }}
+            transition={{
+              duration: Math.random() * 20 + 10,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-10">
+        {/* Header */}
+        <nav className="border-b border-slate-800/50 backdrop-blur-xl bg-slate-900/40">
+          <div className="max-w-7xl mx-auto px-6 py-6">
+            <div className="flex items-center justify-between">
+              {/* Logo */}
+              <motion.div 
+                className="flex items-center gap-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-violet-500 blur-xl opacity-50" />
+                  <div className="relative w-12 h-12 bg-gradient-to-br from-blue-500 to-violet-500 rounded-xl flex items-center justify-center">
+                    <Sparkles className="text-white" size={24} />
+                  </div>
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold text-white tracking-tight">
+                    Mass Balance<span className="text-blue-400"> AI</span>
+                  </h1>
+                  <p className="text-sm text-slate-400 mt-0.5">
+                    Pharmaceutical Intelligence Platform
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Navigation Tabs */}
+              <div className="flex gap-2 bg-slate-900/60 backdrop-blur-xl p-1.5 rounded-xl border border-slate-800/50">
+                {tabs.map((tab, index) => {
+                  const Icon = tab.icon;
+                  return (
+                    <motion.button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`relative px-6 py-2.5 rounded-lg font-medium transition-all flex items-center gap-2 ${
+                        activeTab === tab.id
+                          ? 'text-white'
+                          : 'text-slate-400 hover:text-slate-300'
+                      }`}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      {activeTab === tab.id && (
+                        <motion.div
+                          layoutId="activeTab"
+                          className="absolute inset-0 bg-gradient-to-r from-blue-600 to-violet-600 rounded-lg"
+                          transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                        />
+                      )}
+                      <Icon size={18} className="relative z-10" />
+                      <span className="relative z-10">{tab.label}</span>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        {/* Main Content Area */}
+        <main className="max-w-7xl mx-auto px-6 py-8">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              {activeTab === 'calculator' && <Calculator />}
+              {activeTab === 'analytics' && <Analytics />}
+              {activeTab === 'history' && <History />}
+            </motion.div>
+          </AnimatePresence>
+        </main>
+
+        {/* Footer */}
+        <footer className="border-t border-slate-800/50 backdrop-blur-xl bg-slate-900/40 mt-12">
+          <div className="max-w-7xl mx-auto px-6 py-6">
+            <div className="flex items-center justify-between text-sm">
+              <div className="text-slate-400">
+                <span className="text-white font-semibold">Mass Balance AI</span> v2.0 
+                <span className="mx-2">•</span>
+                <span className="text-blue-400">ICH Q1A(R2)</span> Compliant
+                <span className="mx-2">•</span>
+                Statistical Validation with 95% CI
+              </div>
+              <div className="flex items-center gap-2 text-slate-500">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                <span>System Operational</span>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+  );
+}
+
+export default App;
