@@ -58,7 +58,7 @@ function App() {
                   <h1 className="text-xl font-black text-white tracking-tight leading-none">
                     Mass Balance
                   </h1>
-                  <span className="text-[10px] text-slate-500 uppercase font-black tracking-[0.2em] mt-1 block">Platform v2.1</span>
+                  <span className="text-[10px] text-slate-500 uppercase font-black tracking-[0.2em] mt-1 block">Platform</span>
                 </div>
               </motion.div>
 
