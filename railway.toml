@@ -1,5 +1,5 @@
 [build]
-dockerfilePath = "Dockerfile"
+dockerfilePath = "dockerfile"
 
 [deploy]
 startCommand = "node server.js"
