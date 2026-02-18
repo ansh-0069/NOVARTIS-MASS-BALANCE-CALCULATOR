@@ -44,16 +44,16 @@ const Tooltip = ({ children, content }) => {
 
 function Calculator() {
   const [inputs, setInputs] = useState({
-    initial_api: 98,
-    stressed_api: 82.5,
-    initial_degradants: 0.5,
-    stressed_degradants: 4.9,
-    degradant_mw: 250,
-    parent_mw: 500,
-    rrf: 0.8,
-    stress_type: 'Base',
-    sample_id: 'ABC-001',
-    analyst_name: 'Lab Analyst'
+    initial_api: '',
+    stressed_api: '',
+    initial_degradants: '',
+    stressed_degradants: '',
+    degradant_mw: '',
+    parent_mw: '',
+    rrf: '',
+    stress_type: 'Acid',
+    sample_id: '',
+    analyst_name: ''
   });
 
   const [results, setResults] = useState(null);
