@@ -116,18 +116,36 @@ function Calculator() {
     return () => clearTimeout(timer);
   }, [inputs, autoCalculate]);
 
+  const isNonNumericField = (name) =>
+    name.includes('_type') || name.includes('_id') || name.includes('_name');
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setInputs(prev => ({
       ...prev,
-      [name]: name.includes('_type') || name.includes('_id') || name.includes('_name')
-        ? value
-        : parseFloat(value) || ''
+      // Store raw string so the user can type "0", "0.", "-" etc. freely
+      [name]: isNonNumericField(name) ? value : value
     }));
     setSaved(false);
 
     if (autoCalculate) {
       setCalculating(true);
+    }
+  };
+
+  const handleInputBlur = (e) => {
+    const { name, value } = e.target;
+    if (isNonNumericField(name)) return;
+    // On blur: format to 2 decimal places if the value is a valid number
+    const num = parseFloat(value);
+    if (!isNaN(num)) {
+      setInputs(prev => ({
+        ...prev,
+        [name]: parseFloat(num.toFixed(2))
+      }));
+    } else {
+      // Clear invalid input
+      setInputs(prev => ({ ...prev, [name]: '' }));
     }
   };
 
@@ -387,6 +405,7 @@ function Calculator() {
                         name={field.name}
                         value={inputs[field.name]}
                         onChange={handleInputChange}
+                        onBlur={handleInputBlur}
                         step={field.step}
                         className="w-full px-4 py-3 bg-slate-900/50 border border-white/5 rounded-xl text-white font-mono text-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all hover:bg-slate-800/50 shadow-inner"
                       />
