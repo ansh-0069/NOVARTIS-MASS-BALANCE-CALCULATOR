@@ -9,6 +9,7 @@ import Analytics from './components/Analytics';
 import History from './components/History';
 import Regulatory from './components/Regulatory';
 import LIMSConfig from './components/LIMSConfig';
+import LimsPortal from './components/LimsPortal';
 import PredictiveDegradation from './components/PredictiveDegradation';
 import QbDDashboard from './components/QbDDashboard';
 import StabilityMonitor from './components/StabilityMonitor';
@@ -17,6 +18,7 @@ import SafeErrorBoundary from './components/SafeErrorBoundary';
 function App() {
   const [activeTab, setActiveTab] = useState('calculator');
   const [historyEntry, setHistoryEntry] = useState(null);
+  const [limsEntry, setLimsEntry] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleViewHistoryEntry = (calc) => {
@@ -25,8 +27,15 @@ function App() {
     setIsMobileMenuOpen(false);
   };
 
+  const handleLimsIngest = (sample) => {
+    setLimsEntry(sample);
+    setActiveTab('calculator');
+    setIsMobileMenuOpen(false);
+  };
+
   const tabs = [
     { id: 'calculator', label: 'Analysis Lab', icon: Activity, group: 'Lab' },
+    { id: 'lims', label: 'Enterprise', icon: Database, group: 'Lab' },
     { id: 'history', label: 'Archive', icon: HistoryIcon, group: 'Lab' },
     { id: 'analytics', label: 'Intelligence', icon: BarChart3, group: 'AI' },
     { id: 'predict', label: 'Predict', icon: Sparkles, group: 'AI' },
@@ -167,11 +176,18 @@ function App() {
                 exit={{ opacity: 0, y: -10, filter: 'blur(10px)' }}
                 transition={{ duration: 0.3, ease: "circOut" }}
               >
-                {activeTab === 'calculator' && <Calculator historyEntry={historyEntry} onHistoryEntryConsumed={() => setHistoryEntry(null)} />}
+                {activeTab === 'calculator' && (
+                  <Calculator
+                    historyEntry={historyEntry}
+                    onHistoryEntryConsumed={() => setHistoryEntry(null)}
+                    limsEntry={limsEntry}
+                    onLimsEntryConsumed={() => setLimsEntry(null)}
+                  />
+                )}
                 {activeTab === 'analytics' && <Analytics />}
                 {activeTab === 'history' && <History onViewEntry={handleViewHistoryEntry} />}
                 {activeTab === 'regulatory' && <Regulatory />}
-                {activeTab === 'lims' && <LIMSConfig />}
+                {activeTab === 'lims' && <LimsPortal onIngest={handleLimsIngest} />}
                 {activeTab === 'predict' && <PredictiveDegradation />}
                 {activeTab === 'qbd' && <QbDDashboard />}
                 {activeTab === 'stability' && <StabilityMonitor />}

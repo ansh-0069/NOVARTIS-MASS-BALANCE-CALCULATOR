@@ -42,7 +42,12 @@ const Tooltip = ({ children, content }) => {
   );
 };
 
-function Calculator({ historyEntry, onHistoryEntryConsumed }) {
+function Calculator({
+  historyEntry,
+  onHistoryEntryConsumed,
+  limsEntry,
+  onLimsEntryConsumed
+}) {
   const [inputs, setInputs] = useState({
     initial_api: '',
     stressed_api: '',
@@ -152,6 +157,27 @@ function Calculator({ historyEntry, onHistoryEntryConsumed }) {
     setSaved(false);
     if (onHistoryEntryConsumed) onHistoryEntryConsumed();
   }, [historyEntry]);
+
+  // Pre-populate from LIMS entry
+  useEffect(() => {
+    if (!limsEntry) return;
+    setInputs(prev => ({
+      ...prev,
+      sample_id: limsEntry.SampleName?.toString() || prev.sample_id,
+      stress_type: limsEntry.StressType || prev.stress_type || 'Acid',
+      initial_api: 99.2,
+      stressed_api: limsEntry.CIMB_Result ? parseFloat((limsEntry.CIMB_Result * 0.85).toFixed(2)) : 84.5,
+      initial_degradants: 0.2,
+      stressed_degradants: limsEntry.CIMB_Result ? parseFloat((limsEntry.CIMB_Result * 0.05).toFixed(2)) : 4.8,
+      parent_mw: 420.5,
+      degradant_mw: 210.2,
+      rrf: 0.95,
+      analyst_name: 'LIMS Connector'
+    }));
+    setIsSyncing(true);
+    setAutoCalculate(true);
+    if (onLimsEntryConsumed) onLimsEntryConsumed();
+  }, [limsEntry]);
 
 
   // Check for duplicate sample IDs
