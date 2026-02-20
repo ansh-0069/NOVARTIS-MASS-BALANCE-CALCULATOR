@@ -20,6 +20,9 @@ try {
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Set default LIMS_URL for demo if not provided
+process.env.LIMS_URL = process.env.LIMS_URL || `http://localhost:${PORT}/api/mock-lims`;
+
 // Middleware
 app.use(cors({
     origin: [
@@ -1326,6 +1329,55 @@ app.post('/api/lims/test-connection', async (req, res) => {
             success: false,
             error: error.message
         });
+    }
+});
+
+// GET /api/lims/fetch
+app.post('/api/lims/fetch', async (req, res) => {
+    const { system_name = 'thermo_watson', query = {} } = req.body;
+
+    console.log(`🔍 Ingesting data from LIMS: ${system_name}`);
+
+    try {
+        // Initialize if not already done (using basic mock config)
+        const systems = limsManager.listAvailableSystems();
+        const systemInfo = systems.find(s => s.id === system_name);
+
+        if (!systemInfo) {
+            return res.status(404).json({ success: false, error: `System ${system_name} not found` });
+        }
+
+        // For demo, we ensure it's initialized with mock credentials if needed
+        const status = limsManager.getStatus();
+        if (!status.initialized_systems.includes(system_name)) {
+            limsManager.initialize(system_name, {
+                api_key: 'DEMO-KEY-123',
+                username: 'admin',
+                password: 'password',
+                base_url: process.env.LIMS_URL
+            });
+        }
+
+        const result = await limsManager.fetchSamples(query, system_name);
+
+        if (result.success && result.samples && result.samples.length > 0) {
+            console.log(`✓ successfully fetched ${result.samples.length} samples from ${system_name}`);
+            // Return the first sample for auto-population
+            res.json({
+                success: true,
+                sample: result.samples[0],
+                all_samples: result.samples
+            });
+        } else {
+            res.status(404).json({
+                success: false,
+                error: 'No samples found in LIMS',
+                result
+            });
+        }
+    } catch (error) {
+        console.error('❌ LIMS fetch error:', error);
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 
