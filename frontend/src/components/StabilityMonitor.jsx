@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import {
     Activity, Calendar, Clock, TrendingUp, AlertCircle,
-    CheckCircle, Plus, ChevronRight, BarChart2, Beaker
+    CheckCircle, Plus, ChevronRight, BarChart2, Beaker,
+    Trash2
 } from 'lucide-react';
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -63,11 +64,15 @@ function StabilityMonitor() {
         try {
             const response = await axios.get(`${API_URL}/stability/study/${selectedStudy.study.id}/predict`);
             if (response.data.success) {
-                setPrediction(response.data.prediction);
+                if (response.data.prediction) {
+                    setPrediction(response.data.prediction);
+                } else {
+                    alert('Insufficient data for prediction. Need at least 2 timepoints with Assay results to calculate degradation vector.');
+                }
             }
         } catch (error) {
             console.error('Error predicting shelf life:', error);
-            alert('Insufficient data for prediction. Need at least 2 timepoints with Assay results.');
+            alert('Prediction engine error. Please check server logs.');
         }
     };
 
@@ -80,6 +85,61 @@ function StabilityMonitor() {
             }
         } catch (error) {
             console.error('Error creating study:', error);
+        }
+    };
+
+    const handleSimulateData = async () => {
+        if (!selectedStudy || !selectedStudy.timepoints) return;
+
+        const confirmSim = window.confirm(
+            "This will populate historical data for T=0, 3, 6, 9, 12 months with a simulated degradation trend. Continue?"
+        );
+        if (!confirmSim) return;
+
+        try {
+            // Simulate trend: Start 99.8%, degrade 0.15% per month
+            const timepointsToSimulate = selectedStudy.timepoints.filter(tp =>
+                [0, 3, 6, 9, 12, 18, 24].includes(tp.planned_interval_months)
+            );
+
+            for (const tp of timepointsToSimulate) {
+                const months = tp.planned_interval_months;
+
+                // Add some random noise
+                const noise = (Math.random() - 0.5) * 0.1;
+                const assayValue = parseFloat((99.8 - (0.15 * months) + noise).toFixed(1));
+                const impurityValue = parseFloat((0.1 + (0.12 * months) - noise).toFixed(2));
+
+                const resultsPayload = [
+                    {
+                        parameter_name: 'Assay',
+                        measured_value: assayValue,
+                        unit: '%',
+                        limit_min: 95.0,
+                        limit_max: 105.0,
+                        analyst: 'AI_SIMULATOR',
+                        notes: 'Simulated Data Point'
+                    },
+                    {
+                        parameter_name: 'Total Impurities',
+                        measured_value: impurityValue,
+                        unit: '%',
+                        limit_min: 0,
+                        limit_max: 2.0,
+                        analyst: 'AI_SIMULATOR',
+                        notes: 'Simulated Data Point'
+                    }
+                ];
+
+                await axios.post(`${API_URL}/stability/timepoint/${tp.id}/results`, resultsPayload);
+            }
+
+            alert('Simulation complete. Refreshing data...');
+            fetchStudyDetails(selectedStudy.study.id);
+
+        } catch (error) {
+            console.error('Simulation error:', error);
+            alert('Failed to simulate data.');
         }
     };
 
@@ -170,9 +230,24 @@ function StabilityMonitor() {
                                                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-tighter">Monitoring Active</span>
                                             </div>
                                         </div>
-                                        <span className="text-[9px] font-black bg-white/5 px-2.5 py-1 rounded-xl border border-white/5 text-slate-300 uppercase tracking-widest backdrop-blur-md">
-                                            {study.storage_conditions}
-                                        </span>
+                                        <div className="flex flex-col items-end gap-2">
+                                            <span className="text-[9px] font-black bg-white/5 px-2.5 py-1 rounded-xl border border-white/5 text-slate-300 uppercase tracking-widest backdrop-blur-md">
+                                                {study.storage_conditions}
+                                            </span>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (window.confirm('Are you sure you want to delete this study? This action cannot be undone.')) {
+                                                        axios.delete(`${API_URL}/stability/study/${study.id}`)
+                                                            .then(() => fetchStudies())
+                                                            .catch(err => console.error(err));
+                                                    }
+                                                }}
+                                                className="p-1.5 hover:bg-red-500/20 rounded-lg text-slate-500 hover:text-red-400 transition-colors"
+                                            >
+                                                <Trash2 size={14} />
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
@@ -227,6 +302,15 @@ function StabilityMonitor() {
                                             </div>
                                         </div>
 
+                                        <motion.button
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            onClick={handleSimulateData}
+                                            className="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg flex items-center gap-2"
+                                        >
+                                            <Activity size={14} />
+                                            Simulate Data
+                                        </motion.button>
                                         <motion.button
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
@@ -426,7 +510,7 @@ function StabilityMonitor() {
                                 />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="group">
                                     <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 group-hover:text-blue-400 transition-colors">Batch Vector</label>
                                     <input

@@ -242,13 +242,13 @@ function Regulatory() {
 
             {/* Compliance Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {Object.values(matrix.guidelines).map((guideline, index) => (
+                {Object.entries(matrix.guidelines).map(([key, guideline], index) => (
                     <motion.div
-                        key={guideline.guideline}
+                        key={key}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        onClick={() => setSelectedGuideline(selectedGuideline === guideline.guideline ? null : guideline.guideline)}
+                        onClick={() => setSelectedGuideline(selectedGuideline === key ? null : key)}
                         className="relative overflow-hidden rounded-xl border border-slate-800/50 bg-gradient-to-br from-slate-900/90 to-slate-900/50 backdrop-blur-xl p-6 cursor-pointer hover:border-slate-700/50 transition-all group"
                     >
                         <div className="flex items-start justify-between mb-4">
@@ -289,7 +289,7 @@ function Regulatory() {
 
                         <div className="mt-4 pt-4 border-t border-slate-800/50 flex items-center justify-between">
                             <span className="text-xs text-slate-500">Click for details</span>
-                            {selectedGuideline === guideline.guideline ? (
+                            {selectedGuideline === key ? (
                                 <ChevronDown className="text-blue-400" size={16} />
                             ) : (
                                 <ChevronRight className="text-slate-500 group-hover:text-slate-400" size={16} />
@@ -300,7 +300,7 @@ function Regulatory() {
             </div>
 
             {/* Detailed Requirements View */}
-            {selectedGuideline && (
+            {selectedGuideline && matrix.guidelines[selectedGuideline] && (
                 <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
@@ -309,7 +309,7 @@ function Regulatory() {
                 >
                     <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                         <BookOpen className="text-blue-400" size={24} />
-                        {selectedGuideline} - Detailed Requirements
+                        {matrix.guidelines[selectedGuideline].guideline} - Detailed Requirements
                     </h3>
 
                     <div className="space-y-4">

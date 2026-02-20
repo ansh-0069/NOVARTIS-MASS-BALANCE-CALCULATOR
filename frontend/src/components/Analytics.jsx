@@ -12,6 +12,7 @@ import {
 import axios from 'axios';
 import ROCDashboard from './ROCDashboard';
 import { generateROCPDF } from '../utils/rocPdfGenerator';
+import { generateAnalyticsPDF } from '../utils/analyticsPdfGenerator';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const API_URL = `${API_BASE}/api`;
@@ -175,12 +176,15 @@ function Analytics() {
 
   const handleExportData = async () => {
     if (analyticsView === 'roc') {
-      // User requested PDF summary for Export button as well
       await handleExportPDF();
     } else {
-      // General data export logic here
-      console.log('Exporting general analytics data...');
-      alert('General analytics export coming soon.');
+      // Generate Overview PDF
+      try {
+        generateAnalyticsPDF(stats);
+      } catch (error) {
+        console.error('Export error:', error);
+        alert('Failed to generate PDF report.');
+      }
     }
   };
   const containerVariants = {
@@ -239,7 +243,7 @@ function Analytics() {
       className="space-y-10 relative"
     >
       {/* Top Bar with View Tabs and Export Controls */}
-      <div className="flex items-center justify-between gap-4 mb-8">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
         {/* View Tabs */}
         <div className="flex gap-3">
           <button

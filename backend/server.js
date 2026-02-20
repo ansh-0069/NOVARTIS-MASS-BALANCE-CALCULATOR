@@ -1807,6 +1807,27 @@ app.post('/api/stability/studies', (req, res) => {
         });
 });
 
+// DELETE /api/stability/study/:id - Delete study
+app.delete('/api/stability/study/:id', (req, res) => {
+    const studyId = req.params.id;
+
+    // Delete results linked to timepoints of this study
+    db.run(`DELETE FROM stability_results WHERE timepoint_id IN (SELECT id FROM stability_timepoints WHERE study_id = ?)`, [studyId], (err) => {
+        if (err) return res.status(500).json({ success: false, error: err.message });
+
+        // Delete timepoints
+        db.run(`DELETE FROM stability_timepoints WHERE study_id = ?`, [studyId], (err) => {
+            if (err) return res.status(500).json({ success: false, error: err.message });
+
+            // Delete study
+            db.run(`DELETE FROM stability_studies WHERE id = ?`, [studyId], (err) => {
+                if (err) return res.status(500).json({ success: false, error: err.message });
+                res.json({ success: true, message: 'Study deleted' });
+            });
+        });
+    });
+});
+
 // GET /api/stability/studies - List studies
 app.get('/api/stability/studies', (req, res) => {
     db.all(`SELECT * FROM stability_studies ORDER BY start_date DESC`, [], (err, rows) => {

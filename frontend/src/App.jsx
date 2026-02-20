@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Activity, BarChart3, Database, History as HistoryIcon,
-  Shield, Sparkles, Clock
+  Shield, Sparkles, Clock, Menu, X
 } from 'lucide-react';
 import Calculator from './components/Calculator';
 import Analytics from './components/Analytics';
@@ -17,10 +17,12 @@ import SafeErrorBoundary from './components/SafeErrorBoundary';
 function App() {
   const [activeTab, setActiveTab] = useState('calculator');
   const [historyEntry, setHistoryEntry] = useState(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleViewHistoryEntry = (calc) => {
     setHistoryEntry(calc);
     setActiveTab('calculator');
+    setIsMobileMenuOpen(false);
   };
 
   const tabs = [
@@ -44,8 +46,8 @@ function App() {
 
       <div className="relative z-10 flex flex-col min-h-screen">
         {/* Modern Navbar */}
-        <nav className="sticky top-0 z-50 border-b border-white/5 backdrop-blur-2xl bg-slate-950/40">
-          <div className="max-w-[1600px] mx-auto px-8">
+        <nav className="sticky top-0 z-50 border-b border-white/5 backdrop-blur-2xl bg-slate-950/80">
+          <div className="max-w-[1600px] mx-auto px-4 md:px-8">
             <div className="flex items-center justify-between h-20">
 
               {/* Brand Section */}
@@ -60,16 +62,16 @@ function App() {
                     <Sparkles className="text-white" size={20} />
                   </div>
                 </div>
-                <div className="hidden lg:block">
-                  <h1 className="text-xl font-black text-white tracking-tight leading-none">
+                <div className="block">
+                  <h1 className="text-lg md:text-xl font-black text-white tracking-tight leading-none">
                     Mass Balance
                   </h1>
-                  <span className="text-[10px] text-slate-500 uppercase font-black tracking-[0.2em] mt-1 block">Platform</span>
+                  <span className="text-[9px] md:text-[10px] text-slate-500 uppercase font-black tracking-[0.2em] mt-1 block">Platform</span>
                 </div>
               </motion.div>
 
-              {/* Navigation Center */}
-              <div className="flex items-center gap-1 bg-white/5 p-1 rounded-2xl border border-white/5">
+              {/* Desktop Navigation */}
+              <div className="hidden xl:flex items-center gap-1 bg-white/5 p-1 rounded-2xl border border-white/5">
                 {tabs.map((tab) => {
                   const Icon = tab.icon;
                   const isActive = activeTab === tab.id;
@@ -94,7 +96,17 @@ function App() {
                 })}
               </div>
 
-              {/* Action Section */}
+              {/* Mobile Menu Toggle */}
+              <div className="xl:hidden">
+                <button
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="p-2 text-slate-400 hover:text-white transition-colors"
+                >
+                  {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+              </div>
+
+              {/* Action Section (Desktop) */}
               <div className="hidden xl:flex items-center gap-4">
                 <div className="flex flex-col items-end">
                   <div className="flex items-center gap-2">
@@ -106,10 +118,46 @@ function App() {
               </div>
             </div>
           </div>
+
+          {/* Mobile Navigation Menu */}
+          <AnimatePresence>
+            {isMobileMenuOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="xl:hidden border-t border-white/5 bg-slate-950/95 backdrop-blur-xl overflow-hidden"
+              >
+                <div className="px-4 py-6 space-y-2">
+                  {tabs.map((tab) => {
+                    const Icon = tab.icon;
+                    const isActive = activeTab === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => {
+                          setActiveTab(tab.id);
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive
+                          ? 'bg-blue-600/10 text-blue-400 border border-blue-500/20'
+                          : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                          }`}
+                      >
+                        <Icon size={20} />
+                        <span className="font-semibold">{tab.label}</span>
+                        {isActive && <div className="ml-auto w-1.5 h-1.5 bg-blue-500 rounded-full" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </nav>
 
         {/* Main Content Area */}
-        <main className="flex-1 max-w-[1600px] mx-auto w-full px-8 py-10">
+        <main className="flex-1 max-w-[1600px] mx-auto w-full px-4 md:px-8 py-6 md:py-10">
           <SafeErrorBoundary>
             <AnimatePresence mode="wait">
               <motion.div

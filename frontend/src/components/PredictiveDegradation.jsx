@@ -158,7 +158,7 @@ function PredictiveDegradation() {
                 </div>
 
                 {/* Parameters */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div>
                         <label className="block mb-2">
                             <span className="text-sm font-medium text-slate-300">Stress Type</span>
@@ -216,7 +216,7 @@ function PredictiveDegradation() {
             {(prediction || analysis || mbPrediction) && (
                 <div className="relative overflow-hidden rounded-2xl border border-slate-800/50 bg-gradient-to-br from-slate-900/90 to-slate-900/50 backdrop-blur-xl p-8">
                     {/* Tabs */}
-                    <div className="flex gap-2 mb-6 border-b border-slate-700/50 pb-4">
+                    <div className="flex gap-2 mb-6 border-b border-slate-700/50 pb-4 overflow-x-auto custom-scrollbar">
                         <button
                             onClick={() => setActiveTab('gnn')}
                             className={`px-4 py-2 rounded-lg font-semibold transition-all ${activeTab === 'gnn'
@@ -298,7 +298,7 @@ function PredictiveDegradation() {
                                                 </div>
                                             </div>
 
-                                            <div className="grid grid-cols-3 gap-4 text-sm">
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                                                 <div>
                                                     <span className="text-slate-500">MW:</span>
                                                     <span className="text-white font-semibold ml-2">{product.molecular_weight} g/mol</span>
@@ -331,7 +331,7 @@ function PredictiveDegradation() {
                             <div className="p-6 bg-gradient-to-r from-orange-500/10 to-red-500/10 rounded-xl border border-orange-500/20">
                                 <h4 className="text-lg font-bold text-white mb-4">Degradation Susceptibility</h4>
 
-                                <div className="grid grid-cols-3 gap-4 mb-4">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                                     <div className="text-center">
                                         <div className="text-sm text-slate-400 mb-2">Score</div>
                                         <div className="text-4xl font-bold text-orange-400">
@@ -370,7 +370,7 @@ function PredictiveDegradation() {
                             <div className="p-6 bg-blue-500/10 rounded-xl border border-blue-500/20">
                                 <h4 className="text-lg font-bold text-white mb-4">Degradation Kinetics</h4>
 
-                                <div className="grid grid-cols-2 gap-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <div className="text-sm text-slate-400 mb-2">Rate Constant (k)</div>
                                         <div className="text-2xl font-bold text-blue-400">
@@ -394,7 +394,7 @@ function PredictiveDegradation() {
                             <div className="p-6 bg-slate-800/30 rounded-xl border border-slate-700/50">
                                 <h4 className="text-lg font-bold text-white mb-4">Key Molecular Properties</h4>
 
-                                <div className="grid grid-cols-3 gap-4 text-sm">
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
                                     <div>
                                         <div className="text-slate-400">Molecular Weight</div>
                                         <div className="text-white font-semibold">
@@ -448,7 +448,7 @@ function PredictiveDegradation() {
                                 Predicted Mass Balance
                             </h3>
 
-                            <div className="grid grid-cols-2 gap-6 mb-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div className="p-6 bg-green-500/10 rounded-xl border border-green-500/20 text-center">
                                     <div className="text-sm text-slate-400 mb-2">Predicted LK-IMB</div>
                                     <div className="text-5xl font-bold text-green-400">
@@ -506,7 +506,7 @@ function PredictiveDegradation() {
                     <div className="text-sm text-slate-300">
                         <p className="font-semibold text-blue-400 mb-2">How Predictive Degradation Works</p>
                         <p className="text-xs leading-relaxed">
-                            This AI-powered system uses RDKit for molecular analysis, reaction SMARTS for transformation prediction,
+                            This ML-powered system uses RDKit for molecular analysis, reaction SMARTS for transformation prediction,
                             and machine learning to estimate degradation susceptibility. Predictions are based on structural features,
                             known reactivity patterns, and computational chemistry principles. Use these predictions as a starting point
                             for experimental design — actual degradation may vary based on formulation, impurities, and specific conditions.
