@@ -79,7 +79,7 @@ def generate_excel(db_path=None, output_file=None):
     ws1.write('A5', 'Sample ID');        ws1.write('B5', sample_id, input_bg)
     ws1.write('A6', 'Analyst Name');     ws1.write('B6', analyst, input_bg)
     ws1.write('A7', 'Stress Condition'); ws1.write('B7', stress, input_bg)
-    ws1.write('A8', 'Analysis Date');    ws1.write('B8', timestamp[:10], input_bg)
+    ws1.write('A8', 'Analysis Date');    ws1.write('B8', (timestamp or '')[:10], input_bg)
 
     ws1.write('A10', 'API MEASUREMENTS (%)', subheader_fmt)
     ws1.write('A11', 'Initial API (%)');   ws1.write_number('B11', init_api, input_bg)
@@ -191,8 +191,8 @@ def generate_excel(db_path=None, output_file=None):
     for i, record in enumerate(history):
         row_num = i + 3
         
-        ws4.write(row_num, 0, str(record[0])[:8], calc_bg)
-        ws4.write(row_num, 1, record[1][:10], calc_bg)
+        ws4.write(row_num, 0, str(record[0] or '')[:8], calc_bg)
+        ws4.write(row_num, 1, (record[1] or '')[:10], calc_bg)
         ws4.write(row_num, 2, record[2], calc_bg)
         ws4.write(row_num, 3, record[3], calc_bg)
         ws4.write(row_num, 4, record[4], calc_bg)
@@ -337,7 +337,7 @@ def generate_excel(db_path=None, output_file=None):
     # Fill history for trend chart
     for i, record in enumerate(history[:10][::-1]): # Last 10 reversed
         r = i + 4
-        ws7.write(r, 0, record[1][:10])
+        ws7.write(r, 0, (record[1] or '')[:10])
         ws7.write(r, 1, record[6]) # Stressed API
         ws7.write(r, 2, record[8]) # Stressed Deg
         ws7.write(r, 3, record[19] if len(record) > 19 else 100) # MB
@@ -482,8 +482,8 @@ def generate_history_only():
     for i, record in enumerate(history):
         row_num = i + 3
         
-        ws.write(row_num, 0, str(record[0])[:8], calc_bg)
-        ws.write(row_num, 1, record[1][:10], calc_bg)
+        ws.write(row_num, 0, str(record[0] or '')[:8], calc_bg)
+        ws.write(row_num, 1, (record[1] or '')[:10], calc_bg)
         ws.write(row_num, 2, record[2], calc_bg)
         ws.write(row_num, 3, record[3], calc_bg)
         ws.write(row_num, 4, record[4], calc_bg)

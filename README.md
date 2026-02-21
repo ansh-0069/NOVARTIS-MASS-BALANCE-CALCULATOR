@@ -281,10 +281,10 @@ Frontend will start on: `http://localhost:5173`
 #### Option 2: Generate Excel Report
 
 ```bash
-python app.py
+python excel.py
 ```
 
-This generates `Mass_Balance_Calculator.xlsx` with sample data.
+This generates the calculation history and report files.
 
 ### Accessing the Application
 
@@ -681,7 +681,7 @@ pip uninstall xlsxwriter
 pip install xlsxwriter
 
 # Run script
-python app.py
+python excel.py
 ```
 
 ---
