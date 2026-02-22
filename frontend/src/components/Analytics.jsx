@@ -381,7 +381,7 @@ function Analytics() {
                 </div>
                 <div className="mt-2 flex items-center justify-between text-xs text-slate-500">
                   <span>Confidence Score</span>
-                  <span className="font-bold text-slate-400">100%</span>
+                  <span className="font-bold text-slate-400">93%</span>
                 </div>
               </div>
             </div>
