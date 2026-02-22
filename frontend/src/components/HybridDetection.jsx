@@ -4,18 +4,18 @@ import { Zap, Beaker, FileText, Settings, AlertTriangle } from 'lucide-react';
 
 function HybridDetection({ onConfigChange }) {
     const [detectors, setDetectors] = useState({
-        UV: true, // UV-PDA is always base
-        ELSD: false,
-        MS: false,
-        GC_MS: false
+        UV: true,     // UV-PDA is always base
+        ELSD: true,   // Active by default
+        MS: true,     // Active by default
+        GC_MS: true   // Active by default
     });
 
     const [detectionConfig, setDetectionConfig] = useState({
-        detection_method: 'UV',
+        detection_method: 'UV + ELSD + MS + GC_MS',
         uv_rrf: 1.0,
-        elsd_rrf: null,
-        ms_intensity: null,
-        gc_ms_detected: false,
+        elsd_rrf: 1.0,
+        ms_intensity: 1000000,
+        gc_ms_detected: true,
         gc_ms_volatiles: 0
     });
 
