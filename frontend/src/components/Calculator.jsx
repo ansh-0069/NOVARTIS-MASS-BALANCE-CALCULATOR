@@ -69,11 +69,11 @@ function Calculator({
   const [duplicateWarning, setDuplicateWarning] = useState(false);
   const [existingTests, setExistingTests] = useState([]);
   const [hybridConfig, setHybridConfig] = useState({
-    detection_method: 'UV',
+    detection_method: 'UV + ELSD + MS + GC_MS',
     uv_rrf: 1.0,
-    elsd_rrf: null,
-    ms_intensity: null,
-    gc_ms_detected: false,
+    elsd_rrf: 1.0,
+    ms_intensity: 1000000,
+    gc_ms_detected: true,
     gc_ms_volatiles: 0
   });
   const [isHistoricalView, setIsHistoricalView] = useState(false);
@@ -174,6 +174,14 @@ function Calculator({
       rrf: 0.95,
       analyst_name: 'LIMS Connector'
     }));
+    setHybridConfig({
+      detection_method: 'UV + ELSD + MS + GC_MS',
+      uv_rrf: 1.0,
+      elsd_rrf: 1.0,
+      ms_intensity: 1000000,
+      gc_ms_detected: true,
+      gc_ms_volatiles: 0
+    });
     setIsSyncing(true);
     setAutoCalculate(true);
     if (onLimsEntryConsumed) onLimsEntryConsumed();
@@ -298,11 +306,8 @@ function Calculator({
         const sample = response.data.sample;
         setInputs(prev => ({
           ...prev,
-          // Map backend sample fields to frontend inputs
-          // LIMS uses: SampleName, StressTemperature, StressDuration, CIMB_Result, StressType
           sample_id: sample.SampleName?.toString() || prev.sample_id,
           stress_type: sample.StressType || prev.stress_type || 'Acid',
-          // Use realistic mock values or extracted results
           initial_api: 99.2,
           stressed_api: sample.CIMB_Result ? parseFloat((sample.CIMB_Result * 0.85).toFixed(2)) : 84.5,
           initial_degradants: 0.2,
@@ -312,6 +317,14 @@ function Calculator({
           rrf: 0.95,
           analyst_name: 'LIMS Connector'
         }));
+        setHybridConfig({
+          detection_method: 'UV + ELSD + MS + GC_MS',
+          uv_rrf: 1.0,
+          elsd_rrf: 1.0,
+          ms_intensity: 1000000,
+          gc_ms_detected: true,
+          gc_ms_volatiles: 0
+        });
         setIsSyncing(true);
         setAutoCalculate(true);
       }
