@@ -72,17 +72,17 @@ function HybridDetection({ onConfigChange }) {
             {/* Detector Toggles */}
             <div className="flex flex-wrap gap-3 mb-6">
                 {[
-                    { id: 'UV', label: 'UV-PDA', color: 'blue' },
-                    { id: 'ELSD', label: 'ELSD/CAD', color: 'green' },
-                    { id: 'MS', label: 'LC-MS', color: 'violet' },
-                    { id: 'GC_MS', label: 'GC-MS', color: 'orange' }
+                    { id: 'UV', label: 'UV-PDA', activeClass: 'bg-blue-500/20 border-blue-500/50 text-blue-400' },
+                    { id: 'ELSD', label: 'ELSD/CAD', activeClass: 'bg-green-500/20 border-green-500/50 text-green-400' },
+                    { id: 'MS', label: 'LC-MS', activeClass: 'bg-violet-500/20 border-violet-500/50 text-violet-400' },
+                    { id: 'GC_MS', label: 'GC-MS', activeClass: 'bg-orange-500/20 border-orange-500/50 text-orange-400' }
                 ].map(detector => (
                     <button
                         key={detector.id}
                         onClick={() => toggleDetector(detector.id)}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 border ${detectors[detector.id]
-                                ? `bg-${detector.color}-500/20 border-${detector.color}-500/50 text-${detector.color}-400`
-                                : 'bg-slate-800/50 border-slate-700/50 text-slate-500 hover:bg-slate-800'
+                            ? detector.activeClass
+                            : 'bg-slate-800/50 border-slate-700/50 text-slate-500 hover:bg-slate-800'
                             }`}
                     >
                         {detector.id === 'UV' ? <Beaker size={16} /> : <Zap size={16} />}
