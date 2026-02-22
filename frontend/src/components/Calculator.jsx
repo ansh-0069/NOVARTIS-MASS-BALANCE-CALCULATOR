@@ -260,10 +260,19 @@ function Calculator({
   const handleCalculate = async (silent = false) => {
     if (!silent) setLoading(true);
     try {
-      const response = await axios.post(`${API_URL}/calculate`, {
+      // Convert numeric fields to actual numbers before sending to API
+      const numericPayload = {
         ...inputs,
+        initial_api: parseFloat(inputs.initial_api) || 0,
+        stressed_api: parseFloat(inputs.stressed_api) || 0,
+        initial_degradants: parseFloat(inputs.initial_degradants) || 0,
+        stressed_degradants: parseFloat(inputs.stressed_degradants) || 0,
+        degradant_mw: parseFloat(inputs.degradant_mw) || 0,
+        parent_mw: parseFloat(inputs.parent_mw) || 0,
+        rrf: parseFloat(inputs.rrf) || 0,
         ...hybridConfig
-      });
+      };
+      const response = await axios.post(`${API_URL}/calculate`, numericPayload);
       setResults(response.data);
       setCalculating(false);
     } catch (error) {

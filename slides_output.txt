@@ -1,0 +1,504 @@
+--- Page 1 ---
+From Fractured  to Functional: 
+Reinventing  Mass Balance  in Pharma
+Team:  aarav.singla
+Novartis  NEST  Hackathon  2026
+February  2026
+*Prototype Video in the last slide
+
+--- Page 2 ---
+The Pharmaceutical  Problem  Nobody  Talks About
+Mass balance  (MB) in forced  degradation  is foundational  ΓÇö yet fails 
+far too often.
+Investigations  waste time, delay releases,  and cost millions  when MB 
+doesnΓÇÖt  add up.
+Ironically,  we rely on methods  that ignore  real chemistry.
+Metaphor:  ΓÇ¥Mass  balance  is like pharmaΓÇÖs  bad Wi-Fi ΓÇö flaky, unreliable, 
+and everyoneΓÇÖs  blaming  the router  (detector).ΓÇ¥
+on 2026) Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 2 / 36
+
+--- Page 3 ---
+The Hidden  Cost of Unreliable  Mass Balance
+Key impacts  of MB failures:
+30ΓÇô45 days
+typical  duration  of an OOS
+investigation
+$25KΓÇô$55K
+projected average  cost per
+deviation  investigation
+$1ΓÇô2M
+projected  additional loss if
+batch must be reworked  or 
+scrappedThe root cause:
+Using  OLD  Math 
+for Modern 
+Chemistry
+ΓÇ£The  problem  isnΓÇÖt the science.
+ItΓÇÖs the math.ΓÇ¥
+Sources:  Industry  data ,ICH 
+Q1A(R2),Blessy  et al., Journal  of 
+Pharmaceutical  Analysis,  2014,FDA 
+stability  guidance
+on 2026) Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 3 / 36
+
+--- Page 4 ---
+Real-World  Consequences  of Poor Mass Balance
+Regulatory  Risk:  ICH Q1A(R2)  expects  100% mass balance ΓÇö 
+missing  10% can trigger  full investigations.
+Time  Lost:  Investigations  can delay batch release  by 2ΓÇô6 weeks. 
+Costly  Detours:  $100k+  spent on root cause analysis,  stress study 
+repeats, and justifications.
+Reputation:  MB issues  create audit flags and internal  friction 
+between  R&D, QA, and manufacturing.
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 4 / 36
+
+--- Page 5 ---
+Why Existing  MB Methods  Fail
+SMB  ΓÇô Simple  Mass  Balance : Based  only on purity  and total 
+degradants . Ignores  UV response  factors  and molecular  weights . 
+Over-simplified .
+AMB  ΓÇô Absolute  Mass  Balance : Measures  all peaks  by area. 
+Misses  UV-invisible  degradants . No stoichiometric  awareness .
+RMB  ΓÇô Relative  Mass  Balance : Assumes  equal detectability . 
+Overreacts  to low-degradation  scenarios .
+on 2026) Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 5 / 36
+
+--- Page 6 ---
+LK-IMB: Making  Mass Balance  Chemistry -Aware
+Problem:  Traditional  MB ignores  detector  bias (RRF)  and molecular 
+weight  differences.
+LK-IMB Solution:  Introduces  correction  using two key factors:
+╬╗i ΓÇô Relative  response  factor  (RRF)  correction
+╧ëi ΓÇô Molecular weight  (MW)  ratio of degradant/API
+Corrects  degradant  contributions  before  summing  them in MB. 
+Enables  more chemically  honest  MB calculations.
+Equation: ╬úAPI stress  + Di ┬╖ ╬╗i ┬╖ ╧ëiLK-IMB = ├ù 100API initial
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 6 / 36
+
+--- Page 7 ---
+LK-IMB in Action
+Realistic  scenario:  A degradant  shows  7.2
+Traditional  AMB would  overestimate  its contribution  ΓåÆ 7.2 
+LK-IMB corrects  this: 7.2% ├ù 0.5 ├ù 1.2 = 4.32%.
+Prevents  false OOS results  and unnecessary  investigations.
+Key Impact:  LK-IMB separates  true degradation  risk from detector 
+illusion.ΓÇö-Same  Data  , Smarter  Math
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 7 / 36
+
+--- Page 8 ---
+Building  Forward:  CIMB Framework
+Problem:  Even LK-IMB is limited  ΓÇö it lacks uncertainty  modeling 
+and decision  logic.
+CIMB  = LK-IMB + Statistical  Rigor
+Adds:
+Confidence  intervals  around  MB estimates 
+Risk-based  acceptance  thresholds
+Scenario -sensitive  correction  (S-factors,  thresholds)
+CIMB transforms  mass balance  from a fixed to a flexible,  defensible 
+confidence  zone.
+Figure: Evolution  of Pharmaceutical  Mass Balance  Methods  
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 8 / 36
+
+--- Page 9 ---
+CIMB Architecture  and Formula
+CIMB extends  LK-IMB with advanced  statistical  and chemical 
+corrections.
+Full Equation:
+API stress  + ╬ú Di ┬╖ ╬╗i ┬╖ ╧ëi ┬╖ SiCIMB = ┬▒ CI ├ù 100
+API initial
+Key Terms:
+╬╗i ΓÇô Relative  response  factor  correction
+╧ëi ΓÇô Molecular  weight  ratio
+Si ΓÇô Stoichiometric  correction  factor
+CI ΓÇô Confidence  interval for statistical  validity
+Supports  tiered  decision logic (Low,  Moderate,  High risk)
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 9 / 36
+
+--- Page 10 ---
+CIMB Architecture  and Formula
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 10 / 36
+
+--- Page 11 ---
+Innovations  in the full CIMB++  Method
+Statistical  Intelligence
+Confidence  interval  around  MB result (CIMB  = 96.3%  ┬▒ 1.8%) 
+ROC-optimized  thresholds  for smarter  risk calls
+Bayesian  updating  across  batches
+Chemical  & Analytical  Accuracy
+Molecular  weight  correction  (╧ëi ) 
+Stoichiometry -aware  S-factor  correction  (Si ) 
+Hybrid  detection:  UV + ELSD + MS
+Cascade  Degradation  Network  Modeling  (DAG-MB) 
+Advanced  Quantification  Enhancements
+Predictive  and Explainable  Intelligence  Layer
+Digital  & Regulatory  Readiness 
+LIMS integration  with dashboards 
+Auto-narrative  for audit/filing 
+Lifecycle  traceability  map
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 11 / 36
+
+--- Page 12 ---
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 12 / 36
+
+--- Page 13 ---
+Pillar 1: Innovative Features of base CIMB
+Focus:  uncertainty -aware and risk-aware decisioning
+Mapped  innovations:
+Confidence Interval -Based  Mass Balance 
+ROC-Optimized  Confidence  Thresholds
+Bayesian  Updating  for Method  Trust Over Time 
+Stoichiometry -Aware  Correction  (S-Factor)
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 13 / 36
+
+--- Page 14 ---
+Confidence  Interval -Based  Mass Balance
+Traditional  MB gives a single number  :zero info on reliability
+CIMB introduces  statistical  uncertainty  via confidence  intervals  (CI).
+Method:
+Use Gaussian  error propagation  or Monte  Carlo simulations  (e.g., 
+10,000  trials)
+Account  for variability  in assay, impurities,  RRF, MW ratios
+Output:  A range ΓÇö e.g., CIMB = 96.3%  ┬▒ 1.8% (95% CI)
+Impact:  Differentiates  real imbalance  from method  noise;  improves 
+regulatory  defensibility.
+on 2026) Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 14 / 36
+
+--- Page 15 ---
+ROC-Optimized  Confidence  Thresholds
+Instead  of arbitrary  cutoffs  (like MB ΓëÑ 95%),  CIMB++  uses 
+data-driven  thresholds  based on ROC analysis.
+Process:
+Plot true positive  vs. false positive rates across  MB confidence  intervals 
+Find optimal  threshold  balancing  sensitivity  (detecting  real issues)  and 
+specificity  (avoiding  false alarms)  for smarter,  risk-based  quality triggers
+Example:  You may choose  to flag MB less than 92.7%  only if CI 
+width  more than 2.5%
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 15 / 36
+
+--- Page 16 ---
+Bayesian  Updating  for Method  Trust Over Time
+Initial  MB assessments  may have wide uncertainty  ΓÇö but confidence 
+improves  with repeated data.
+CIMB++  incorporates  Bayesian  updating  to refine CI with new study 
+results.
+How  it works:
+Start with a prior distribution  based on early study 
+Update  the belief as more degradation  batches are tested 
+Posterior  becomes  sharper  ΓåÆ narrower  CI ΓåÆ more trust
+Ideal for lifecycle methods  and long-term tracking  across  batches.
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 16 / 36
+
+--- Page 17 ---
+Stoichiometry -Aware  Correction  (S-Factor)
+Many  degradants  gain or lose atoms  during  stress (e.g., hydrolysis 
+adds water,  decarboxylation  loses CO2).
+The S-Factor  accounts  for mass shift from the original  API.
+Formula:
+API stress  + ╬ú Di ┬╖ ╬╗i ┬╖ ╧ëi ┬╖ SiCIMB = ├ù 100API initial
+Si adjusts  for stoichiometric  contribution  of each degradant. 
+Prevents  over- or under-estimation  in reactions  involving  mass 
+exchange.
+on 2026) Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 17 / 36
+
+--- Page 18 ---
+Pillar 2: Upgrades  to form CIMB++
+Focus:  chemical  reality  and detector  coverage
+Mapped  Upgrades:
+Upgrade -1: Predictive  Degradation  Modeling 
+Upgrade -2: Hybrid  Detection  Integration
+Upgrade -3: Cascade  Degradation  Network  Modeling  (DAG-MB)
+Upgrade -4: Structure -Based  RRF Prediction 
+Upgrade -5: qNMR  Absolute  Quantification  Layer 
+Upgrade -6: Digital  Twin with Arrhenius  Kinetics 
+Upgrade -7: SHAP-Based  Explainable  Audit Trail
+on 2026) Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 18 / 36
+
+--- Page 19 ---
+Predictive  Degradation  Modeling
+Use AI/ML  or expert  systems  (e.g., Zeneth,  DEREK  Nexus)  to 
+predict  likely degradants  before  stress testing.
+Input:  API structure  + stress type (acid, base, peroxide,  photolysis) 
+Output:  Predicted  degradant  structures  with MW, volatility,  UV 
+activity
+Benefits:
+Plan detection  methods  proactively  (ELSD,  MS, etc.)
+Pre-fill MW ratios (╧ëi ) and anticipate  UV-invisible species 
+Reduce  trial-and-error in stress method development
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 19 / 36
+
+--- Page 20 ---
+Hybrid  Detection  Integration
+Not all degradants  are UV-active  ΓÇö traditional  methods  miss volatile, 
+neutral,  or low chromophore  species.
+CIMB++  supports  hybrid  detection  using:
+UV (for chromophores)
+ELSD (evaporative  light scattering  detector  ΓÇö for non-UV species) 
+MS (mass  spectrometry  ΓÇö for trace/unknown  degradants)
+Multi-detector  integration improves  coverage  and reduces  false low 
+MB.
+System  reconciles detector  outputs  using peak alignment and 
+quantitation  logic.
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 20 / 36
+
+--- Page 21 ---
+Cascade  Degradation  Network  Modeling  (DAG-MB)
+Core Idea:
+Model  degradation as a Directed 
+Acyclic  Graph  (DAG)
+How  it works:
+API and degradants  represented  as 
+nodes
+Mass tracked  along reaction 
+pathways
+Supports  multi-generation 
+degradation
+Ensures  true conservation  of mass
+Identifies  exact mass flow across 
+network
+Tracking  degradation  as a netwo rk, not a flat list
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 21 / 36
+
+--- Page 22 ---
+Advanced Quantification  Enhancements
+Structure -Based  RRF Prediction
+Predict  RRF directly  from 
+molecular  structure
+Uses molecular  descriptors 
+(RDKit)
+Enables  correction  without 
+degradant  standards
+Applicable  from early-stage 
+stress studiesqNMR  Absolute  Quantification 
+Layer
+Provides  detector -independent 
+quantification
+Based  on nuclear  spin 
+measurement
+Eliminates  detector  response 
+bias
+Validates  and calibrates  CIMB 
+corrections
+Enabling  accurate  mass  balance  without  analytical 
+limitations
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 22 / 36
+
+--- Page 23 ---
+Predictive  and Explainable  Intelligence  Layer
+Digital  Twin  with Arrhenius 
+Kinetics
+Fit kinetic  model  from early 
+stability  data
+Apply  Arrhenius  equation  for 
+time projection
+Predict  future  mass balance and 
+CI
+Enables  long-term stability 
+forecasting
+SHAP -Based  Explainable  Audit 
+Trail
+Quantifies contribution  of each 
+correction  factor
+Provides transparent  decision 
+explanation
+Supports  regulatory  and audit 
+review
+Ensures  fully traceable  analytical 
+decisions
+From  reactive  analysis  to predictive  and explainable 
+systems
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 23 / 36
+
+--- Page 24 ---
+Pillar 3: Digital  & Regulatory  Readiness
+Focus:  traceability,  automation,  and 
+decision  support
+Mapped  innovations:
+LIMS and Real-Time Dashboard 
+Integration
+Method  Lifecycle  Traceability  Map 
+Regulatory -Ready  Narrative  Layer 
+Stability -Aware  MB Trending
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 24 / 36
+
+--- Page 25 ---
+Pillar 3: Digital  & Regulatory  Readiness
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 25 / 36
+
+--- Page 26 ---
+LIMS and Real-Time Dashboard  Integration
+CIMB++  can be integrated  into Laboratory  Information  Management 
+Systems  (LIMS)  and visualization  tools.
+Use case:
+Auto-import  assay and degradant  data
+Real-time CIMB calculation  and confidence  interval  (CI) generation 
+Dashboard  flags high-risk batches  or deviations
+Empowers  QC and QA teams  with data-driven  insights  instead  of 
+static PDF reports.
+Enhances  traceability,  audit readiness,  and release  decision  speed.
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 26 / 36
+
+--- Page 27 ---
+Method  Lifecycle  Traceability  Map
+Mass balance  should  not be a one-time metric  ΓÇö it evolves  across 
+development.
+CIMB++  supports  a lifecycle  view: trace degradant  trends  from R&D 
+to commercial.
+Map includes:
+Stress condition used
+Degradants  observed  and corrected 
+CIMB,  CI, and outlier  notes 
+Changes  in formulation  or method
+Improves  tech transfer,  audit readiness,  and process  robustness.
+Figure:  Pharmaceutical  Lifecycle  Traceability  Tracker:  Mass Balance  & Stabilit y
+onEvolutionTeam:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 27 / 36
+
+--- Page 28 ---
+Regulatory -Ready  Narrative  Layer
+Beyond  numbers  ΓÇö reviewers  want a scientific  explanation  for low or 
+variable  MB.
+CIMB++ generates  an auto-narrative  from data, including: 
+ΓÇ£CIMB  = 94.7%  ┬▒ 2.2%,  which  remains  within  the defined  risk 
+threshold  (CI width  less than 3.0%).ΓÇ¥
+ΓÇ£Observed  deficit  is attributed  to a low-RRF degradant  confirmed  by
+MS.ΓÇ¥
+ΓÇ£Method  precision  has improved  across  4 batches  (CI tightening  from
+┬▒3.4%  to ┬▒1.6%).ΓÇ¥
+Speeds  up audit defense,  file writing,  and team communication.
+Figure:  Dto Regulatory  Narrativ eon 
+2026)ataWorkflow Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 28 / 36
+
+--- Page 29 ---
+Stability -Aware  MB Trending
+Mass balance  should  be tracked across  real-time and accelerated 
+stability  studies.
+CIMB++  enables  time-series trending  of MB and CI over months.
+Benefits:
+Detect  gradual  shifts (e.g., method  drift, degradant evolution) 
+Catch  instability  early ΓÇö even before  specification  failure 
+Support  shelf-life projections  with statistical  backing
+Trending  insights  can be auto-exported into stability  reports  or 
+dashboards.
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 29 / 36
+
+--- Page 30 ---
+Why CIMB++  vs. Status  Quo
+Same  data ΓåÆ Smarter  decisions
+Dimension Current  Industry CIMB++
+Calculation Single number Point  estimate  + CI
+Detection  bias Ignored  (assumes  RRF=1) Corrected  (RRF,  MW,
+S-factor)
+Decision  logic Fixed threshold  (95%) Risk-stratified ,
+ROC-optimized
+Investigation
+speed5ΓÇô7 days (manual) less than  2 days
+(diagnostic  engine)
+Regulatory
+defenseReactive  justification Auto -generated narrative
+Bottom  line: WeΓÇÖre  not replacing your data ΓÇö weΓÇÖre making  it tell 
+the truth.
+on 2026) Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 30 / 36
+
+--- Page 31 ---
+Adaptive  Decision  Matrix:  Choosing  the Right MB Method
+One MB method  doesnΓÇÖt  fit all degradation  studies  .
+CIMB++  includes  a scenario -based  matrix  to guide method  selection.
+Key decision  factors:
+Extent  of degradation  (low vs. high) 
+Availability  of RRF and MW data 
+Type of detection  (UV, ELSD,  MS)
+This matrix  prevents  misuse  of methods  and supports  regulatory 
+defensibility.
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 31 / 36
+
+--- Page 32 ---
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 32 / 36
+
+--- Page 33 ---
+Why CIMB Matters  in Practice
+Scientific  benefits:
+Γ£ôMore accurate  interpretation 
+of degradation  studies 
+Supports  stability -indicating 
+method  validation  (ICH Q1A)
+Γ£ôBetter  understanding of 
+degradation  pathways 
+Improves  confidence  in analytical 
+conclusions
+Γ£ôReduces  ambiguity  in mass 
+balance  interpretation
+Helps distinguish  real degradation 
+from measurement  biasOperational  benefits:
+Γ£ôFaster  analytical 
+decision -making
+Investigations  can delay release  by 
+1ΓÇô4 weeks  (ISPE)
+Γ£ôReduced  unnecessary  repeat 
+testing
+Improves  efficiency  of stability 
+programs
+Γ£ôNo new hardware  required 
+Integrates  with existing  HPLC 
+and LIMS workflows
+Enhancing  decisions  using  data already  generated
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 33 / 36
+
+--- Page 34 ---
+Implementation  Roadmap
+Deployment  can be achieved  using  a phased  approach:
+Phase  1: Pilot  (0ΓÇô3 months)
+Apply  CIMB alongside  existing  mass balance  methods  for selected  stability 
+studies
+Phase  2: Validation  (3ΓÇô6 months)
+Establish  internal  performance  criteria  and analytical  workflows
+Phase  3: Integration  (6ΓÇô12 months)
+Deploy  into routine  stability  and degradation analysis  environment
+on 2026) Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 34 / 36
+
+--- Page 35 ---
+Conclusion:  Smarter  Mass Balance,  Stronger  Decisions
+Traditional  MB is static and blind to uncertainty.
+CIMB++  transforms  MB into a predictive,  risk-aware,  and 
+explainable  framework.
+From LK-IMB to CIMB++,  we now:
+Correct  degradant  bias (RRF,  MW, Stoichiometry) 
+Quantify  uncertainty (CI, Bayesian  updating)
+Make smarter  choices  (ROC thresholds,  adaptive  matrix) 
+Visualize  impact  (Dashboards,  lifecycle  traceability)
+Evolved  MB from  a number  to a narrative.
+We didnΓÇÖt  just patch  a metric  ΓÇö we evolved  it.
+LetΓÇÖs  make  mass  balance  intelligent.
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 35 / 36
+
+--- Page 36 ---
+References  & Research  Foundation
+Core Framework:
+1Lukulay,  P. & Hokanson,  G. (2006). 
+Reconciling  Mass  Balance  in Forced 
+Degradation  Studies.  Pharm  Tech , 
+30(3):112 ΓÇô124.
+2K┬¿orner,  A., et al. (2018).  Uncovering
+deficiencies  in mass  balance  using 
+HPLC -CLND.  J Pharm  Biomed  Anal.
+3Baertschi,  S.W.,  et al. (2024).  Mass 
+Balance  in Pharmaceutical  Stress  Testing: 
+A Review.  AAPS  PharmSciTech .Standards  & Methods:
+4ICH Q1A(R2).  Stability Testing  of 
+New Drug  Substances  and Products.
+5Marden,  S., et al. (2024).  Mass
+Balance:  Principles  and Applications.
+AAPS  J, 26(5):96.
+6Zhang,  K., et al. (2017 ). RRF and 
+mass  balance  in forced  degradation . J 
+Pharm  Biomed  Anal, 145:537ΓÇô545.
+Our Contribution:  End-to-end framework  bridging three separate 
+domains:  analytical  chemistry  (detector  bias correction),  statistical 
+inference  (uncertainty  quantification),  and quality  operations  (automated 
+diagnostics)ΓÇövalidated  against  127 literature  cases and proven  to 
+eliminate 82% of false investigations.
+Full bibliography  in technical  documentation  ΓÇö Validated  against  127 published  studies (2018ΓÇô2024)
+on Team:  aarav.singla  (Novartis  NEST  Hackath CIMB++  Final Presentation February  2026 36 / 36
+
+--- Page 37 ---
+Prototype Presentation
+
+

@@ -447,26 +447,29 @@ function getTDistributionValue(degreesOfFreedom, alpha = 0.05) {
 // Calculation Engine
 async function calculateMassBalance(data, hybrid_results) {
     const {
-        initial_api,
-        stressed_api,
-        initial_degradants,
-        stressed_degradants,
-        degradant_mw,
-        parent_mw,
-        rrf,
         stress_type = 'Unknown'
     } = data;
+
+    // Parse all numeric inputs to ensure they are numbers (not strings from form data)
+    const initial_api = parseFloat(data.initial_api) || 0;
+    const stressed_api = parseFloat(data.stressed_api) || 0;
+    const initial_degradants = parseFloat(data.initial_degradants) || 0;
+    const stressed_degradants = parseFloat(data.stressed_degradants) || 0;
+    const degradant_mw = parseFloat(data.degradant_mw) || 0;
+    const parent_mw = parseFloat(data.parent_mw) || 0;
+    const rrf = parseFloat(data.rrf) || 0;
 
     // Basic calculations
     const delta_api = initial_api - stressed_api;
     const delta_degradants = stressed_degradants - initial_degradants;
-    const degradation_level = (delta_api / initial_api) * 100;
+    const degradation_level = initial_api > 0 ? (delta_api / initial_api) * 100 : 0;
 
     // SMB - Simple Mass Balance
     const smb = stressed_api + stressed_degradants;
 
     // AMB - Absolute Mass Balance
-    const amb = ((stressed_api + stressed_degradants) / (initial_api + initial_degradants)) * 100;
+    const amb_denom = initial_api + initial_degradants;
+    const amb = amb_denom > 0 ? ((stressed_api + stressed_degradants) / amb_denom) * 100 : 0;
 
     // Hybrid Detection Integration
     const hybrid_detection = calculateCompositeRRF(data);
@@ -526,7 +529,7 @@ async function calculateMassBalance(data, hybrid_results) {
 
     // LK-IMB - Lukulay-Körner Integrated Mass Balance with Confidence Intervals
     const corrected_degradants_lk = stressed_degradants * lambda * omega;
-    const lk_imb_point = ((stressed_api + corrected_degradants_lk) / initial_api) * 100;
+    const lk_imb_point = initial_api > 0 ? ((stressed_api + corrected_degradants_lk) / initial_api) * 100 : 0;
 
     // Calculate uncertainty and confidence intervals for LK-IMB
     // Assuming typical analytical uncertainty of ±2.5% for HPLC methods
@@ -536,7 +539,7 @@ async function calculateMassBalance(data, hybrid_results) {
     const api_variance = Math.pow(stressed_api * analytical_uncertainty / 100, 2);
     const deg_variance = Math.pow(stressed_degradants * analytical_uncertainty / 100, 2);
     const lk_combined_variance = api_variance + deg_variance * Math.pow(lambda * omega, 2);
-    const lk_combined_std = Math.sqrt(lk_combined_variance) / initial_api * 100;
+    const lk_combined_std = initial_api > 0 ? Math.sqrt(lk_combined_variance) / initial_api * 100 : 0;
 
     // 95% confidence interval using t-distribution (n=3 replicates typical)
     const df = 2; // degrees of freedom (n-1 for n=3)
@@ -558,11 +561,11 @@ async function calculateMassBalance(data, hybrid_results) {
 
     // CIMB - Corrected Integrated Mass Balance with Confidence Intervals
     const corrected_degradants_cimb = stressed_degradants * lambda * stoichiometric_factor;
-    const cimb_point = ((stressed_api + corrected_degradants_cimb) / initial_api) * 100;
+    const cimb_point = initial_api > 0 ? ((stressed_api + corrected_degradants_cimb) / initial_api) * 100 : 0;
 
     // Propagate uncertainty through the calculation for CIMB
     const cimb_combined_variance = api_variance + deg_variance * Math.pow(lambda * stoichiometric_factor, 2);
-    const cimb_combined_std = Math.sqrt(cimb_combined_variance) / initial_api * 100;
+    const cimb_combined_std = initial_api > 0 ? Math.sqrt(cimb_combined_variance) / initial_api * 100 : 0;
 
     const cimb_margin_of_error = t_critical * cimb_combined_std;
 
