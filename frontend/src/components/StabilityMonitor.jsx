@@ -91,24 +91,49 @@ function StabilityMonitor() {
     const handleSimulateData = async () => {
         if (!selectedStudy || !selectedStudy.timepoints) return;
 
+        const condition = selectedStudy.study.storage_conditions;
+
+        // Arrhenius-based degradation rates per ICH Q1A storage conditions
+        // Long-term (25°C/60%RH): slow; Intermediate (30°C/65%RH): ~2× faster;
+        // Accelerated (40°C/75%RH): ~4× faster (Q10 ≈ 2 per 10°C rise)
+        const degradationProfiles = {
+            '25C/60RH': { rateMin: 0.08, rateMax: 0.16, impBase: 0.08, impRate: 0.10, label: 'Long-Term' },
+            '30C/65RH': { rateMin: 0.18, rateMax: 0.28, impBase: 0.10, impRate: 0.18, label: 'Intermediate' },
+            '40C/75RH': { rateMin: 0.38, rateMax: 0.55, impBase: 0.15, impRate: 0.35, label: 'Accelerated' },
+        };
+
+        const profile = degradationProfiles[condition] || degradationProfiles['25C/60RH'];
+
+        // Randomise degradation rate within the profile band
+        const degradationRate = profile.rateMin + Math.random() * (profile.rateMax - profile.rateMin);
+
+        // Randomise T=0 assay in a realistic pharmaceutical range (98.5 – 101.5%)
+        const initialAssay = 98.5 + Math.random() * 3.0;
+
+        // Analytical noise: ±0.15% RSD (typical HPLC precision per ICH Q2)
+        const hplcRSD = 0.15;
+
         const confirmSim = window.confirm(
-            "This will populate historical data for T=0, 3, 6, 9, 12 months with a simulated degradation trend. Continue?"
+            `Simulate ${profile.label} degradation (${condition})?\n` +
+            `Rate: ~${degradationRate.toFixed(3)}%/month | T₀ Assay: ~${initialAssay.toFixed(1)}%\n\n` +
+            `Timepoints: T=0, 3, 6, 12, 18, 24 months (ICH Q1A schedule)`
         );
         if (!confirmSim) return;
 
         try {
-            // Simulate trend: Start 99.8%, degrade 0.15% per month
             const timepointsToSimulate = selectedStudy.timepoints.filter(tp =>
-                [0, 3, 6, 9, 12, 18, 24].includes(tp.planned_interval_months)
+                [0, 3, 6, 12, 18, 24].includes(tp.planned_interval_months)
             );
 
             for (const tp of timepointsToSimulate) {
                 const months = tp.planned_interval_months;
 
-                // Add some random noise
-                const noise = (Math.random() - 0.5) * 0.1;
-                const assayValue = parseFloat((99.8 - (0.15 * months) + noise).toFixed(1));
-                const impurityValue = parseFloat((0.1 + (0.12 * months) - noise).toFixed(2));
+                // Gaussian-like noise scaled to HPLC RSD
+                const assayNoise = (Math.random() + Math.random() - 1) * hplcRSD;
+                const impNoise = (Math.random() + Math.random() - 1) * (hplcRSD * 0.5);
+
+                const assayValue = parseFloat((initialAssay - (degradationRate * months) + assayNoise).toFixed(1));
+                const impurityValue = parseFloat(Math.max(0, profile.impBase + (profile.impRate * months) + impNoise).toFixed(2));
 
                 const resultsPayload = [
                     {
@@ -118,7 +143,7 @@ function StabilityMonitor() {
                         limit_min: 95.0,
                         limit_max: 105.0,
                         analyst: 'AI_SIMULATOR',
-                        notes: 'Simulated Data Point'
+                        notes: `${profile.label} simulation — rate ${degradationRate.toFixed(3)}%/mo`
                     },
                     {
                         parameter_name: 'Total Impurities',
@@ -127,14 +152,14 @@ function StabilityMonitor() {
                         limit_min: 0,
                         limit_max: 2.0,
                         analyst: 'AI_SIMULATOR',
-                        notes: 'Simulated Data Point'
+                        notes: `${profile.label} simulation`
                     }
                 ];
 
                 await axios.post(`${API_URL}/stability/timepoint/${tp.id}/results`, resultsPayload);
             }
 
-            alert('Simulation complete. Refreshing data...');
+            alert(`Simulation complete (${profile.label} — ${degradationRate.toFixed(3)}%/month). Refreshing...`);
             fetchStudyDetails(selectedStudy.study.id);
 
         } catch (error) {
@@ -142,6 +167,7 @@ function StabilityMonitor() {
             alert('Failed to simulate data.');
         }
     };
+
 
     // Helper to format chart data
     const getChartData = () => {
@@ -386,9 +412,9 @@ function StabilityMonitor() {
                                         className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6"
                                     >
                                         {[
-                                            { label: 'Forecasted Lifespan (t95)', value: `${prediction.predicted_t95} MO`, icon: Clock, color: 'emerald', desc: 'STABILITY RADIUS' },
-                                            { label: 'Degradation Gradient', value: `${prediction.slope}%`, icon: TrendingUp, color: 'amber', desc: 'MONTHLY DECAY VOL' },
-                                            { label: 'Regression Target', value: 'ASSAY CORE', icon: Activity, color: 'blue', desc: 'PRIMARY MONITOR' }
+                                            { label: 'Forecasted Lifespan (t95)', value: `${prediction.predicted_t95} MO`, icon: Clock, color: 'emerald', desc: 'ICH Q1E SHELF LIFE' },
+                                            { label: 'Degradation Gradient', value: `${prediction.slope}% / MO`, icon: TrendingUp, color: 'amber', desc: 'LINEAR DECAY RATE' },
+                                            { label: 'Regression Fit (R²)', value: prediction.r_squared ?? 'N/A', icon: Activity, color: 'blue', desc: 'OLS GOODNESS OF FIT' }
                                         ].map((stat) => (
                                             <div key={stat.label} className="p-6 bg-white/5 rounded-3xl border border-white/5 backdrop-blur-md">
                                                 <div className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center justify-between">
@@ -456,11 +482,17 @@ function StabilityMonitor() {
                                                         </td>
                                                         <td className="py-5 px-8">
                                                             {assay ? (
-                                                                <div className="flex items-center gap-2 text-emerald-400 uppercase tracking-widest text-[9px] font-black">
-                                                                    <CheckCircle size={14} /> Global Pass
-                                                                </div>
+                                                                assay.measured_value >= 95 ? (
+                                                                    <div className="flex items-center gap-2 text-emerald-400 uppercase tracking-widest text-[9px] font-black">
+                                                                        <CheckCircle size={14} /> Pass ≥95%
+                                                                    </div>
+                                                                ) : (
+                                                                    <div className="flex items-center gap-2 text-red-400 uppercase tracking-widest text-[9px] font-black">
+                                                                        <AlertCircle size={14} /> OOS &lt;95%
+                                                                    </div>
+                                                                )
                                                             ) : (
-                                                                <span className="text-slate-600 uppercase tracking-widest text-[9px] font-black opacity-40 italic">Null Data Stream</span>
+                                                                <span className="text-slate-600 uppercase tracking-widest text-[9px] font-black opacity-40 italic">Pending</span>
                                                             )}
                                                         </td>
                                                     </tr>
