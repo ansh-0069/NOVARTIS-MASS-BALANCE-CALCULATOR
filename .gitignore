@@ -80,6 +80,7 @@ htmlcov/
 # Generated files
 *.xlsx
 *.pdf
+*.txt
 !README.md
 
 # Lock files (optional - uncomment if you want to ignore them)
